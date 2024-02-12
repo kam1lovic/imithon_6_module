@@ -1,23 +1,25 @@
 from django.urls import reverse_lazy
-from django.views.generic import ListView, UpdateView, CreateView
+from django.views.generic import ListView, UpdateView, DeleteView
 
-from apps.models import Product
-
-
-class IndexView(ListView):
-    template_name = 'apps/base.html'
-    queryset = Product.objects.all()
-    context_object_name = 'products'
+from apps.forms import CarbonadForm
+from apps.models import Carbonad
 
 
-class ProductCreateView(CreateView):
-    template_name = 'apps/create_todo.html'
-    model = Product
-    fields = ['image', 'title', 'blocks']
-    success_url = reverse_lazy('index')
+class CarbonadListVeiw(ListView):
+    template_name = 'index.html'
+    queryset = Carbonad.objects.order_by('-id')
+    context_object_name = 'carbonads'
 
-class TodoUpdateView(UpdateView):
-    model = Product
-    fields = ['title', 'blocks']
-    template_name = 'apps/update_product.html'
-    success_url = reverse_lazy('index')
+
+class CarbonadUpdateView(UpdateView):
+    template_name = 'update_product.html'
+    form_class = CarbonadForm
+    model = Carbonad
+    success_url = reverse_lazy('carbonad_list')
+
+
+class CarbonadDeleteView(DeleteView):
+    template_name = 'delete_todo.html'
+    model = Carbonad
+    queryset = Carbonad.objects.all()
+    success_url = reverse_lazy('carbonad_list')
